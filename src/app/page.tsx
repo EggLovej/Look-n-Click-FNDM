@@ -1,24 +1,35 @@
-'use client'
-import { use, useEffect, useState } from 'react'
+"use client";
 
+import { useState } from "react";
+import NumberPage from "./components/NumberPage";
+import StocksPage from "./components/StocksPage";
 
 export default function Home() {
-  const [value, setValue] = useState<number | null>(42)
-
-  useEffect(() => {
-    fetch('http://localhost:8080/api/value')
-      .then((res) => res.json())
-      .then((data) => setValue(data.value))
-  }, [])
+  const [activePage, setActivePage] = useState<"number" | "stocks">("number");
 
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        Value: <span className="text-[32px] font-bold">{value}</span>
+    <div className="min-h-screen bg-black text-white flex flex-col items-center px-4 py-8 gap-8">
+      <header className="flex gap-4">
+        <button
+          onClick={() => setActivePage("number")}
+          className={`px-4 py-2 rounded-full ${
+            activePage === "number" ? "bg-white text-black" : "bg-neutral-800"
+          }`}
+        >
+          Number
+        </button>
+        <button
+          onClick={() => setActivePage("stocks")}
+          className={`px-4 py-2 rounded-full ${
+            activePage === "stocks" ? "bg-white text-black" : "bg-neutral-800"
+          }`}
+        >
+          Stocks
+        </button>
+      </header>
+      <main className="w-full max-w-6xl">
+        {activePage === "number" ? <NumberPage /> : <StocksPage />}
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-
-      </footer>
     </div>
   );
 }
